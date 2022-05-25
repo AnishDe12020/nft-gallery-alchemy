@@ -1,10 +1,11 @@
 import type { NextPage } from 'next'
 import { useState } from 'react'
+import NFTCard from '../components/NFTCard'
 
 const Home: NextPage = () => {
   const [walletAddress, setWalletAddress] = useState<string>('')
   const [collectionAddress, setCollectionAddress] = useState<string>('')
-  const [nfts, setNfts] = useState<string[]>([])
+  const [nfts, setNfts] = useState<any[]>([])
   const [fetchForCollection, setFetchForCollection] = useState<boolean>(false)
 
   console.log(nfts)
@@ -47,7 +48,7 @@ const Home: NextPage = () => {
                 )
               ).json()
 
-              setNfts(nfts)
+              setNfts(nfts.nfts)
             } else {
               const nfts = await (
                 await fetch(
@@ -55,12 +56,19 @@ const Home: NextPage = () => {
                 )
               ).json()
 
-              setNfts(nfts)
+              setNfts(nfts.ownedNfts)
             }
           }}
         >
           Search
         </button>
+      </div>
+      <div className="mt-4 flex w-5/6 flex-wrap justify-center gap-y-12 space-x-2">
+        {nfts &&
+          nfts.length &&
+          nfts.map((nft) => {
+            return <NFTCard key={nft.id.tokenId} nft={nft}></NFTCard>
+          })}
       </div>
     </div>
   )
